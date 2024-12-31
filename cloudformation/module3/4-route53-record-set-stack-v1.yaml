@@ -25,6 +25,7 @@ Parameters:
   paramRootDomain:
     Description: Specify a root domain for your website (such as example.com)
     Type: String
+    Default: citrusoft.net
   paramSubdomain:
     Description: OPTIONAL. Specify a subdomain (such as 'www' or 'apex' for www.example.com or apex.example.com). You can leave it empty to skip.
     Type: String
@@ -32,10 +33,11 @@ Parameters:
   paramHostedZoneId:
     Description: Specify a public hosted zone ID for root domain
     Type: String
+    Default: Z11E057WPVA473
   paramUniqueTagName:
     Description: Specify a unique name for tag
     Type: String
-    Default: static-website-hosting-to-s3
+    Default: citrusoft-website
     AllowedPattern: "[\\x20-\\x7E]*"
     ConstraintDescription: Must contain only ASCII characters
 
@@ -44,6 +46,8 @@ Mappings:
   RegionMap: # based on https://docs.aws.amazon.com/general/latest/gr/s3.html#s3_website_region_endpoints
     us-east-1:
       S3HostedZoneId: Z3AQBSTGFYJSTF
+    us-east-2:
+      S3HostedZoneId: Z2O1EMRO9K5GLX
     us-west-1:
       S3HostedZoneId: Z2F56UZL2M1ACD
     us-west-2:
@@ -93,7 +97,7 @@ Resources:
         - Name: !Sub ${paramSubdomain}.${paramRootDomain} # point to an S3 bucket with subdomain in the same account (such as www.example.com)
           Type: A # 'A' routes traffic to an IPv4 address and some AWS resources
           AliasTarget:
-              DNSName: !Sub s3-website-${AWS::Region}.amazonaws.com 
+              DNSName: !Sub s3-website-${AWS::Region}.amazonaws.com
               HostedZoneId: !FindInMap # note, that it is different from paramHostedZoneId - this hosted zone is for region that you created the bucket in!
                 - RegionMap
                 - !Ref 'AWS::Region'

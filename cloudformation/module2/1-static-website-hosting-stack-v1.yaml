@@ -10,13 +10,13 @@ Parameters:
   paramStaticWebsiteHostingBucketName:
     Description: Specify a unique name for S3 bucket that will host static website
     Type: String
-    Default: westworld-website-hosting-bucket
+    Default: citrusoft-website-bucket
     AllowedPattern: "(?!(^xn--|.+-s3alias$))^[a-z0-9][a-z0-9-]{1,61}[a-z0-9]$"  # includes using S3 Transfer Acceleration
     ConstraintDescription: Bucket names must be between 3 (min) and 63 (max) characters long, can consist only of lowercase letters, numbers, dots, and hyphens, must begin and end with a letter or number, etc. 
   paramUniqueTagName:
     Description: Specify a unique name for tag
     Type: String
-    Default: static-website-hosting-to-s3
+    Default: citrusoft-website
     AllowedPattern: "[\\x20-\\x7E]*"
     ConstraintDescription: Must contain only ASCII characters
 

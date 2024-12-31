@@ -24,6 +24,7 @@ Parameters:
   paramRootDomain:
     Description: Specify a root domain for your website (such as example.com)
     Type: String
+    Default: citrusoft.net
   paramSubdomain:
     Description: OPTIONAL. Specify a subdomain (such as 'www' or 'apex' for www.example.com or apex.example.com). You can leave it empty to skip.
     Type: String
@@ -31,7 +32,7 @@ Parameters:
   paramUniqueTagName:
     Description: Specify a unique name for tag
     Type: String
-    Default: static-website-hosting-to-s3
+    Default: citrusoft-website
     AllowedPattern: "[\\x20-\\x7E]*"
     ConstraintDescription: Must contain only ASCII characters
 
@@ -76,7 +77,7 @@ Resources:
       BucketName: !Sub ${paramSubdomain}.${paramRootDomain} # use the name of subdomain with domain, such as www.example.com
       WebsiteConfiguration:
         RedirectAllRequestsTo: # Configure the bucket to route traffic to the root domain bucket
-          HostName: !Ref myS3BucketForRootDomain
+          HostName: !GetAtt myS3BucketForRootDomain.RegionalDomainName # !Ref myS3BucketForRootDomain
           Protocol: http
       AccessControl: BucketOwnerFullControl
       Tags:

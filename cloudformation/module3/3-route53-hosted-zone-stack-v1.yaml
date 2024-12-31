@@ -22,11 +22,12 @@ Metadata:
 Parameters:
   paramRootDomain:
     Description: Specify a root domain for your website (such as example.com)
-    Type: String  
+    Type: String
+    Default: citrusoft.net
   paramUniqueTagName:
     Description: Specify a unique name for tag
     Type: String
-    Default: static-website-hosting-to-s3
+    Default: citrusoft-website
     AllowedPattern: "[\\x20-\\x7E]*"
     ConstraintDescription: Must contain only ASCII characters
 

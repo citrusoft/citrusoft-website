@@ -20,11 +20,11 @@ Parameters:
     MaxLength: 255
     AllowedPattern: ^[a-zA-Z][-a-zA-Z0-9]*$
     ConstraintDescription: Should contain uppercase, lowercase letters and digits from 0 to 9 only
-    Default: westworld-codebuild-for-website-hosting
+    Default: citrusoft-website-project
   paramGitHubLink:
     Type: String
     Description: Provide your GitHub link with source code for static website
-    Default: https://github.com/Tiamatt/StaticWebsiteHostingToS3.git
+    Default: https://github.com/citrusoft/citrusoft-website.git
   paramBuildSpecRelativePathInGitHub:
     Description: Provide a relative path for BuildSpec yaml file in source code for static website 
     Type: String
@@ -32,11 +32,11 @@ Parameters:
   paramStaticWebsiteHostingBucketName:
     Description: Specify an existing S3 bucket that hosts static website
     Type: String
-    Default: westworld-website-hosting-bucket
+    Default: citrusoft-website-bucket
   paramUniqueTagName:
     Description: Specify a unique name for tag
     Type: String
-    Default: static-website-hosting-to-s3
+    Default: citrusoft-website-codebuild
     AllowedPattern: "[\\x20-\\x7E]*"
     ConstraintDescription: Must contain only ASCII characters
 
@@ -62,7 +62,7 @@ Resources:
           PolicyDocument:
             Version: 2012-10-17
             Statement:
-              # statement to create and stream CloudWatch
+              # statement to create and stream CloudWatch logs
               - Action:
                   - logs:CreateLogGroup
                   - logs:CreateLogStream
@@ -104,16 +104,16 @@ Resources:
         Location: !Ref paramGitHubLink
         GitCloneDepth: 1
         BuildSpec: !Ref paramBuildSpecRelativePathInGitHub
-        Auth:
-          Resource: !Ref myCodeBuildSourceCredential
-          Type: OAUTH
-      Triggers:
-        Webhook: true
-        FilterGroups:
-          - - Type: EVENT
-              Pattern: PUSH
-            - Type: HEAD_REF
-              Pattern: ^refs/heads/main # for feature branches use: ^refs/heads/feature/.* 
+      #   Auth:
+      #     Resource: !Ref myCodeBuildSourceCredential
+      #     Type: OAUTH
+      # Triggers:
+      #   Webhook: true
+      #   FilterGroups:
+      #     - - Type: EVENT
+      #         Pattern: PUSH
+      #       - Type: HEAD_REF
+      #         Pattern: ^refs/heads/feature/.*  # ^refs/heads/main # for feature branches use: ^refs/heads/feature/.* 
       Environment: # use Ubuntu standard v7
         Type: LINUX_CONTAINER
         ComputeType: BUILD_GENERAL1_SMALL
@@ -131,9 +131,9 @@ Resources:
           GroupName: !Sub ${paramCodeBuildProjectName}-cloud-watch-logs
       Tags:
         - Key: mastering-cloudformation
-          Value:  !Ref paramUniqueTagName
+          Value: !Ref paramUniqueTagName
 
-## =================== OUTPUT =================== ##
+## ======================= OUTPUT ====================== ##
 Outputs:
   outputCodeBuildProject:
     Description: CodeBuild project name
